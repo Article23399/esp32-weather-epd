@@ -224,6 +224,13 @@ void drawMultiLnString(int16_t x, int16_t y, const String &text,
  */
 void initDisplay()
 {
+  // remap spi
+  SPI.end();
+  SPI.begin(PIN_EPD_SCK,
+            PIN_EPD_MISO,
+            PIN_EPD_MOSI,
+            PIN_EPD_CS);
+
   pinMode(PIN_EPD_PWR, OUTPUT);
   digitalWrite(PIN_EPD_PWR, HIGH);
 #ifdef DRIVER_WAVESHARE
@@ -232,12 +239,7 @@ void initDisplay()
 #ifdef DRIVER_DESPI_C02
   display.init(115200, true, 10, false);
 #endif
-  // remap spi
-  SPI.end();
-  SPI.begin(PIN_EPD_SCK,
-            PIN_EPD_MISO,
-            PIN_EPD_MOSI,
-            PIN_EPD_CS);
+
 
   display.setRotation(0);
   display.setTextSize(1);

@@ -16,8 +16,7 @@
  */
 
 #include <Arduino.h>
-#include <Adafruit_BME280.h>
-#include <Adafruit_Sensor.h>
+#include <SensirionI2CSht3x.h>
 #include <Preferences.h>
 #include <time.h>
 #include <WiFi.h>
@@ -282,41 +281,44 @@ void setup()
   }
   killWiFi(); // WiFi no longer needed
 
-  // GET INDOOR TEMPERATURE AND HUMIDITY, start BME280...
-  pinMode(PIN_BME_PWR, OUTPUT);
-  digitalWrite(PIN_BME_PWR, HIGH);
-  float inTemp     = NAN;
-  float inHumidity = NAN;
-  Serial.print(String(TXT_READING_FROM) + " BME280... ");
-  TwoWire I2C_bme = TwoWire(0);
-  Adafruit_BME280 bme;
+  // 后面再改，先写死了
+  float inTemp     = 0;
+  float inHumidity = 0;
+  // GET INDOOR TEMPERATURE AND HUMIDITY, start SHT3x...
+  // pinMode(PIN_BME_PWR, OUTPUT);
+  // digitalWrite(PIN_BME_PWR, HIGH);
+  // float inTemp     = NAN;
+  // float inHumidity = NAN;
+  // Serial.print(String(TXT_READING_FROM) + " SHT3x... ");
+  // TwoWire I2C_bme = TwoWire(0);
+  // SensirionI2CSht3x bme;
 
-  I2C_bme.begin(PIN_BME_SDA, PIN_BME_SCL, 100000); // 100kHz
-  if(bme.begin(BME_ADDRESS, &I2C_bme))
-  {
-    inTemp     = bme.readTemperature(); // Celsius
-    inHumidity = bme.readHumidity();    // %
+  // I2C_bme.begin(PIN_BME_SDA, PIN_BME_SCL, 100000); // 100kHz
+  // if(bme.begin(BME_ADDRESS, &I2C_bme))
+  // {
+  //   inTemp     = bme.readTemperature(); // Celsius
+  //   inHumidity = bme.readHumidity();    // %
 
-    // check if BME readings are valid
-    // note: readings are checked again before drawing to screen. If a reading
-    //       is not a number (NAN) then an error occurred, a dash '-' will be
-    //       displayed.
-    if (std::isnan(inTemp) || std::isnan(inHumidity))
-    {
-      statusStr = "BME " + String(TXT_READ_FAILED);
-      Serial.println(statusStr);
-    }
-    else
-    {
-      Serial.println(TXT_SUCCESS);
-    }
-  }
-  else
-  {
-    statusStr = "BME " + String(TXT_NOT_FOUND); // check wiring
-    Serial.println(statusStr);
-  }
-  digitalWrite(PIN_BME_PWR, LOW);
+  //   // check if BME readings are valid
+  //   // note: readings are checked again before drawing to screen. If a reading
+  //   //       is not a number (NAN) then an error occurred, a dash '-' will be
+  //   //       displayed.
+  //   if (std::isnan(inTemp) || std::isnan(inHumidity))
+  //   {
+  //     statusStr = "BME " + String(TXT_READ_FAILED);
+  //     Serial.println(statusStr);
+  //   }
+  //   else
+  //   {
+  //     Serial.println(TXT_SUCCESS);
+  //   }
+  // }
+  // else
+  // {
+  //   statusStr = "BME " + String(TXT_NOT_FOUND); // check wiring
+  //   Serial.println(statusStr);
+  // }
+  // digitalWrite(PIN_BME_PWR, LOW);
 
   String refreshTimeStr;
   getRefreshTimeStr(refreshTimeStr, timeConfigured, &timeInfo);
